@@ -1,0 +1,153 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FitTrack - Projeto Refatorado</title>
+    <meta name="description" content="Acompanhamento de peso, IMC e consumo de água em HTML, CSS e JavaScript puro." />
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}" />
+</head>
+
+<body>
+    <div class="bg-shape bg-shape-a" aria-hidden="true"></div>
+    <div class="bg-shape bg-shape-b" aria-hidden="true"></div>
+
+    <header class="topbar">
+        <div class="container topbar-inner">
+            <div>
+                <h1 class="brand"><span>Fit</span>Track</h1>
+                <p class="welcome" id="welcomeMessage">Olá, Usuário</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container layout">
+        <section class="panel forms-panel">
+            <h2 class="panel-title">Ações</h2>
+
+            <div class="form-block">
+                <h3>Registrar Peso</h3>
+                <form id="weightForm" class="grid-form">
+                    <label for="weightDate">Data</label>
+                    <input id="weightDate" name="date" type="date" required />
+
+                    <label for="weightValue">Peso (kg)</label>
+                    <input id="weightValue" name="weight" type="number" step="0.1" min="1" placeholder="Ex: 82.5"
+                        required />
+
+                    <button type="submit" class="btn btn-primary">Salvar Registro</button>
+                </form>
+            </div>
+
+            <div class="form-block">
+                <h3>Meu Perfil</h3>
+                <form id="profileForm" class="grid-form">
+                    <label for="profileName">Nome</label>
+                    <input id="profileName" name="name" type="text" required />
+
+                    <label for="profileHeight">Altura (cm)</label>
+                    <input id="profileHeight" name="height" type="number" min="100" max="250" required />
+
+                    <label for="profileStartWeight">Peso Inicial (kg)</label>
+                    <input id="profileStartWeight" name="startWeight" type="number" step="0.1" min="1" required />
+
+                    <label for="profileGoalWeight">Meta de Peso (kg)</label>
+                    <input id="profileGoalWeight" name="goalWeight" type="number" step="0.1" min="1" required />
+
+                    <button type="submit" class="btn">Salvar Perfil</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="content-panel">
+            <section class="metrics-grid">
+                <article class="metric-card metric-highlight">
+                    <p class="metric-label">Peso Atual</p>
+                    <p class="metric-value" id="metricCurrentWeight">0 kg</p>
+                </article>
+
+                <article class="metric-card">
+                    <p class="metric-label">Meta</p>
+                    <p class="metric-value" id="metricGoalWeight">0 kg</p>
+                    <p class="metric-sub" id="metricRemaining">Faltam 0 kg</p>
+                </article>
+
+                <article class="metric-card">
+                    <p class="metric-label">Perdido</p>
+                    <p class="metric-value" id="metricTotalLost">0 kg</p>
+                    <p class="metric-sub">Desde o início</p>
+                </article>
+
+                <article class="metric-card">
+                    <p class="metric-label">IMC</p>
+                    <p class="metric-value" id="metricBmi">0.0</p>
+                </article>
+            </section>
+
+            <section class="panel chart-panel">
+                <div class="panel-head">
+                    <h2 class="panel-title">Evolução do Peso</h2>
+                </div>
+                <svg id="weightChart" class="chart" viewBox="0 0 720 280" aria-label="Gráfico de peso">
+                    <rect x="0" y="0" width="720" height="280" class="chart-bg"></rect>
+                    <g id="chartGrid"></g>
+                    <line id="goalLine" class="goal-line" x1="0" y1="0" x2="720" y2="0"></line>
+                    <polyline id="weightPolyline" class="weight-line" points=""></polyline>
+                    <g id="weightDots"></g>
+                </svg>
+                <p class="chart-caption" id="chartCaption"></p>
+            </section>
+
+            <section class="three-cols">
+                <article class="panel bmi-panel">
+                    <h2 class="panel-title">IMC</h2>
+                    <div class="bmi-number" id="bmiNumber">0.0</div>
+                    <p class="bmi-category" id="bmiCategory">-</p>
+
+                    <div class="bmi-track">
+                        <div class="bmi-segment under"></div>
+                        <div class="bmi-segment normal"></div>
+                        <div class="bmi-segment over"></div>
+                        <div class="bmi-segment obese"></div>
+                        <div id="bmiMarker" class="bmi-marker" aria-hidden="true"></div>
+                    </div>
+                    <div class="bmi-legend">
+                        <span>15</span>
+                        <span>25</span>
+                        <span>30</span>
+                        <span>40</span>
+                    </div>
+                </article>
+
+                <article class="panel water-panel">
+                    <h2 class="panel-title">Água Hoje</h2>
+                    <div class="water-wrap">
+                        <div id="waterRing" class="water-ring">
+                            <div class="water-inner">
+                                <span id="waterCount">0/8</span>
+                            </div>
+                        </div>
+                        <div class="water-controls">
+                            <p id="waterStatus">Faltam 8 copos</p>
+                            <div class="water-buttons">
+                                <button id="waterMinus" class="btn" type="button">-1</button>
+                                <button id="waterPlus" class="btn btn-primary" type="button">+1</button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="panel history-panel">
+                    <h2 class="panel-title">Histórico</h2>
+                    <ul id="historyList" class="history-list"></ul>
+                </article>
+            </section>
+        </section>
+    </main>
+
+    <script src="{% static 'scripts/scripts.js' %}"></script>
+</body>
+
+</html>
