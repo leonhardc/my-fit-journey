@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyFitJourney - Monitore suas Métricas Corporais</title>
+    <link rel="stylesheet" href="{% static 'styles/index.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">MyFitJourney</div>
+            <ul class="nav-links">
+                <li><a href="#features">Recursos</a></li>
+                <li><a href="#about">Sobre</a></li>
+                <li><a href="{% url 'usuario:login' %}">Login</a></li>
+                <li><a href="{% url 'usuario:cadastro' %}">Cadastro</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Monitore sua Jornada Fitness</h1>
+            <p>Acompanhe métricas corporais, atinja seus objetivos e mantenha-se motivado com dados precisos e insights personalizados.</p>
+            <a href="{% url 'usuario:cadastro' %}" class="btn">Começar Agora</a>
+        </div>
+    </section>
+    
+    <section id="features" class="features">
+        <h2>Recursos Principais</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>📊 Gráficos Detalhados</h3>
+                <p>Visualize seu progresso com gráficos interativos e relatórios personalizados.</p>
+            </div>
+            <div class="feature-card">
+                <h3>⚖️ Rastreamento de Peso</h3>
+                <p>Monitore variações de peso e acompanhe tendências ao longo do tempo.</p>
+            </div>
+            <div class="feature-card">
+                <h3>💪 Métricas Corporais</h3>
+                <p>Registre gordura corporal, IMC, circunferências e outras medidas importantes.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎯 Objetivos Personalizados</h3>
+                <p>Defina metas e receba recomendações baseadas em seus objetivos.</p>
+            </div>
+            <div class="feature-card">
+                <h3>📱 Sincronização</h3>
+                <p>Acesse seus dados em qualquer dispositivo, sempre sincronizado.</p>
+            </div>
+            <div class="feature-card">
+                <h3>📈 Histórico Completo</h3>
+                <p>Mantenha um registro histórico de todos os seus acompanhamentos.</p>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <p>&copy; 2026 MyFitJourney. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
