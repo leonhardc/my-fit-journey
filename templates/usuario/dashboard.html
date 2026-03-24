@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FitTrack - Projeto Refatorado</title>
+    <title>My Fit Journey</title>
     <meta name="description" content="Acompanhamento de peso, IMC e consumo de água em HTML, CSS e JavaScript puro." />
     <link rel="stylesheet" href="{% static 'styles/styles.css' %}" />
 </head>
@@ -17,8 +17,8 @@
     <header class="topbar">
         <div class="container topbar-inner">
             <div>
-                <h1 class="brand"><span>Fit</span>Track</h1>
-                <p class="welcome" id="welcomeMessage">Olá, Usuário</p>
+                <h1 class="brand"><span>My</span> Fit Journey</h1>
+                <p class="welcome" id="welcomeMessage">Olá, {{ usuario.user.username }}</p>
             </div>
         </div>
     </header>
@@ -30,8 +30,9 @@
             <div class="form-block">
                 <h3>Registrar Peso</h3>
                 <form id="weightForm" class="grid-form">
+                    {% csrf_token %}
                     <label for="weightDate">Data</label>
-                    <input id="weightDate" name="date" type="date" required />
+                    <input id="weightDate" name="date" type="date" required value="{{hoje|date:'Y-m-d'}}" />
 
                     <label for="weightValue">Peso (kg)</label>
                     <input id="weightValue" name="weight" type="number" step="0.1" min="1" placeholder="Ex: 82.5"
@@ -44,17 +45,21 @@
             <div class="form-block">
                 <h3>Meu Perfil</h3>
                 <form id="profileForm" class="grid-form">
+                    {% csrf_token %}
                     <label for="profileName">Nome</label>
-                    <input id="profileName" name="name" type="text" required />
+                    <input id="profileName" name="name" type="text" required value="{{ usuario.user.first_name }}" />
 
                     <label for="profileHeight">Altura (cm)</label>
-                    <input id="profileHeight" name="height" type="number" min="100" max="250" required />
+                    <input id="profileHeight" name="height" type="number" min="0" max="250" required
+                        value="{{ usuario.altura|floatformat:0 }}" />
 
                     <label for="profileStartWeight">Peso Inicial (kg)</label>
-                    <input id="profileStartWeight" name="startWeight" type="number" step="0.1" min="1" required />
+                    <input id="profileStartWeight" name="startWeight" type="number" step="0.1" min="1" required
+                        value="{{ usuario.peso_inicial|floatformat:0 }}" />
 
                     <label for="profileGoalWeight">Meta de Peso (kg)</label>
-                    <input id="profileGoalWeight" name="goalWeight" type="number" step="0.1" min="1" required />
+                    <input id="profileGoalWeight" name="goalWeight" type="number" step="0.1" min="1" required
+                        value="{{ usuario.meta_peso|floatformat:0 }}" />
 
                     <button type="submit" class="btn">Salvar Perfil</button>
                 </form>
@@ -147,7 +152,7 @@
         </section>
     </main>
 
-    <script src="{% static 'scripts/scripts.js' %}"></script>
+    <!-- <script src="{% static 'scripts/scripts.js' %}"></script> -->
 </body>
 
 </html>

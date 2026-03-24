@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from datetime import datetime
+from django.utils import timezone
 from usuario.models import Usuario
 
 def entrar(request):
@@ -53,4 +55,10 @@ def index(request):
 def dashboard(request):
     if not request.user.is_authenticated:
         return redirect('usuario:login')
-    return render(request, 'usuario/dashboard.html')
+    usuario = Usuario.objects.get(user=request.user)
+    hoje = timezone.now().date()
+    contexto = {
+        'usuario': usuario,
+        'hoje': hoje,
+    }
+    return render(request, 'usuario/dashboard.html', contexto)

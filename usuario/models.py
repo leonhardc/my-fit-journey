@@ -8,12 +8,14 @@ class Usuario(models.Model):
     telefone = models.CharField(max_length=20, null=True, blank=True, verbose_name="Telefone")
     objetivo = models.CharField(max_length=255, null=True, blank=True, verbose_name="Objetivo")
     data_nascimento = models.DateField(null=True, blank=True, verbose_name="Data de Nascimento")
+    peso_inicial = models.FloatField(null=True, blank=True, verbose_name="Peso Inicial")
+    meta_peso = models.FloatField(null=True, blank=True, verbose_name="Meta de Peso")
 
     @property
     def imc(self):
         peso = Peso.objects.filter(usuario=self).order_by('-data').first()
         if self.altura and peso:
-            return peso.valor / (self.altura ** 2)
+            return round(peso.valor / (self.altura / 100) ** 2, 2)
         return None
     
     @property
