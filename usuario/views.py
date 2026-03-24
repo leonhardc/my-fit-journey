@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+from usuario.models import Usuario
 
 def entrar(request):
     if request.method == 'GET':
@@ -18,7 +20,32 @@ def cadastro(request):
     if request.method == 'GET':
         return render(request, 'usuario/cadastro.html')
     if request.method == 'POST':
-        pass
+        nome = request.POST.get('nome')
+        sobrenome = request.POST.get('sobrenome')
+        email = request.POST.get('email')
+        telefone = request.POST.get('telefone')
+        data_nascimento = request.POST.get('data_nascimento')
+        objetivo = request.POST.get('objetivo')
+        senha = request.POST.get('senha')
+        confirmar_senha = request.POST.get('confirmar_senha')
+        if senha != confirmar_senha:
+            return render(request, 'usuario/cadastro.html', {'error': 'As senhas não coincidem'})
+        # Aqui você pode adicionar a lógica para criar o usuário no banco de dados
+        usuario = User.objects.create_user(
+            username=email, 
+            email=email, 
+            password=senha, 
+            first_name=nome, 
+            last_name=sobrenome
+        )
+        usuario.save()
+        Usuario.objects.create(
+            user=usuario, 
+            telefone=telefone, 
+            data_nascimento=data_nascimento, 
+            objetivo=objetivo
+        )
+        return redirect('usuario:login')
 
 def index(request):
     return render(request, 'usuario/index.html')
