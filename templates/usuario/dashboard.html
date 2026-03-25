@@ -70,24 +70,24 @@
             <section class="metrics-grid">
                 <article class="metric-card metric-highlight">
                     <p class="metric-label">Peso Atual</p>
-                    <p class="metric-value" id="metricCurrentWeight">0 kg</p>
+                    <p class="metric-value" id="metricCurrentWeight">{{ peso_atual.valor|floatformat:2|default:"0.00" }} kg</p>
                 </article>
 
                 <article class="metric-card">
                     <p class="metric-label">Meta</p>
-                    <p class="metric-value" id="metricGoalWeight">0 kg</p>
+                    <p class="metric-value" id="metricGoalWeight">{{ usuario.meta_peso|floatformat:2|default:"0.00" }} kg</p>
                     <p class="metric-sub" id="metricRemaining">Faltam 0 kg</p>
                 </article>
 
                 <article class="metric-card">
                     <p class="metric-label">Perdido</p>
-                    <p class="metric-value" id="metricTotalLost">0 kg</p>
+                    <p class="metric-value" id="metricTotalLost">{{ peso_perdido|floatformat:2|default:"0.00" }} kg</p>
                     <p class="metric-sub">Desde o início</p>
                 </article>
 
                 <article class="metric-card">
                     <p class="metric-label">IMC</p>
-                    <p class="metric-value" id="metricBmi">0.0</p>
+                    <p class="metric-value" id="metricBmi">{{ usuario.imc|floatformat:2|default:"0.0" }}</p>
                 </article>
             </section>
 
@@ -108,7 +108,7 @@
             <section class="three-cols">
                 <article class="panel bmi-panel">
                     <h2 class="panel-title">IMC</h2>
-                    <div class="bmi-number" id="bmiNumber">0.0</div>
+                    <div class="bmi-number" id="bmiNumber">{{ usuario.imc|floatformat:2|default:"0.0" }}</div>
                     <p class="bmi-category" id="bmiCategory">-</p>
 
                     <div class="bmi-track">

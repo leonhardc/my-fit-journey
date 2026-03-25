@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.utils import timezone
-from usuario.models import Usuario
+from usuario.models import Usuario, Peso
 
 def entrar(request):
     if request.method == 'GET':
@@ -57,8 +57,14 @@ def dashboard(request):
         return redirect('usuario:login')
     usuario = Usuario.objects.get(user=request.user)
     hoje = timezone.now().date()
+    peso_inicial = usuario.peso_inicial
+    peso_atual = Peso.objects.filter(usuario=usuario).order_by('-data').first() # Ultimo peso registrado
+    peso_perdido = peso_inicial - peso_atual.valor if peso_inicial and peso_atual else 0
     contexto = {
         'usuario': usuario,
         'hoje': hoje,
+        'peso_inicial': peso_inicial,
+        'peso_atual': peso_atual,
+        'peso_perdido': peso_perdido,
     }
     return render(request, 'usuario/dashboard.html', contexto)

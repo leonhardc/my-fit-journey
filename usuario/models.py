@@ -8,7 +8,6 @@ class Usuario(models.Model):
     telefone = models.CharField(max_length=20, null=True, blank=True, verbose_name="Telefone")
     objetivo = models.CharField(max_length=255, null=True, blank=True, verbose_name="Objetivo")
     data_nascimento = models.DateField(null=True, blank=True, verbose_name="Data de Nascimento")
-    peso_inicial = models.FloatField(null=True, blank=True, verbose_name="Peso Inicial")
     meta_peso = models.FloatField(null=True, blank=True, verbose_name="Meta de Peso")
 
     @property
@@ -26,6 +25,10 @@ class Usuario(models.Model):
             return today.year - self.data_nascimento.year - ((today.month, today.day) < (self.data_nascimento.month, self.data_nascimento.day))
         return None
 
+    @property
+    def peso_inicial(self):
+        peso = Peso.objects.filter(usuario=self).order_by('data').first()
+        return peso.valor if peso else None
     def __str__(self):
         return self.user.username
 
