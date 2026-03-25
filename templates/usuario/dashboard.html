@@ -70,12 +70,14 @@
             <section class="metrics-grid">
                 <article class="metric-card metric-highlight">
                     <p class="metric-label">Peso Atual</p>
-                    <p class="metric-value" id="metricCurrentWeight">{{ peso_atual.valor|floatformat:2|default:"0.00" }} kg</p>
+                    <p class="metric-value" id="metricCurrentWeight">{{ peso_atual.valor|floatformat:2|default:"0.00" }}
+                        kg</p>
                 </article>
 
                 <article class="metric-card">
                     <p class="metric-label">Meta</p>
-                    <p class="metric-value" id="metricGoalWeight">{{ usuario.meta_peso|floatformat:2|default:"0.00" }} kg</p>
+                    <p class="metric-value" id="metricGoalWeight">{{ usuario.meta_peso|floatformat:2|default:"0.00" }}
+                        kg</p>
                     <p class="metric-sub" id="metricRemaining">Faltam 0 kg</p>
                 </article>
 
@@ -92,17 +94,54 @@
             </section>
 
             <section class="panel chart-panel">
-                <div class="panel-head">
-                    <h2 class="panel-title">Evolução do Peso</h2>
-                </div>
-                <svg id="weightChart" class="chart" viewBox="0 0 720 280" aria-label="Gráfico de peso">
-                    <rect x="0" y="0" width="720" height="280" class="chart-bg"></rect>
-                    <g id="chartGrid"></g>
-                    <line id="goalLine" class="goal-line" x1="0" y1="0" x2="720" y2="0"></line>
-                    <polyline id="weightPolyline" class="weight-line" points=""></polyline>
-                    <g id="weightDots"></g>
-                </svg>
-                <p class="chart-caption" id="chartCaption"></p>
+                <canvas id="grafico-pesos"></canvas>
+                {{ datas|json_script:"datas" }}
+                {{ pesos|json_script:"pesos" }}
+                {{ linha_meta|json_script:"linhaMeta" }}
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                    // TODO: Mudar isso para um arquivo de script externo
+                    const datas = JSON.parse(document.getElementById('datas').textContent);
+                    const pesos = JSON.parse(document.getElementById('pesos').textContent);
+                    const linhaMeta = JSON.parse(document.getElementById('linhaMeta').textContent);
+                    const ctx = document.getElementById('grafico-pesos').getContext('2d');
+
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: datas,
+                            datasets: [
+                                {
+                                    label: 'Peso (kg)',
+                                    data: pesos,
+                                    borderWidth: 2,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: 'Meta de Peso',
+                                    data: linhaMeta,
+                                    borderDash: [5, 5], // linha pontilhada
+                                    borderWidth: 2
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    display: true
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: false,
+                                    min: Math.min(...pesos, ...linhaMeta) - 10,
+                                    max: Math.max(...pesos, ...linhaMeta ) + 10
+                                }
+                            }
+                        }
+                    });
+                </script>
             </section>
 
             <section class="three-cols">
@@ -116,7 +155,18 @@
                         <div class="bmi-segment normal"></div>
                         <div class="bmi-segment over"></div>
                         <div class="bmi-segment obese"></div>
-                        <div id="bmiMarker" class="bmi-marker" aria-hidden="true"></div>
+                        <div id="bmiMarker" class="bmi-marker" aria-hidden="true"
+                            data-bs-percentage="{{ bmi_percentage }}"></div>
+                        <script>
+                            // TODO: Mudar isso para um arquivo de script externo
+                            document.addEventListener('DOMContentLoaded', function () {
+                                const marker = document.getElementById('bmiMarker');
+                                const percentage = parseFloat(marker.getAttribute('data-bs-percentage')) || 0;
+                                const trackWidth = document.querySelector('.bmi-track').offsetWidth;
+                                const markerPosition = (percentage / 100) * trackWidth;
+                                marker.style.left = `${markerPosition}px`;
+                            });
+                        </script>
                     </div>
                     <div class="bmi-legend">
                         <span>15</span>
@@ -126,7 +176,7 @@
                     </div>
                 </article>
 
-                <article class="panel water-panel">
+                <!-- <article class="panel water-panel">
                     <h2 class="panel-title">Água Hoje</h2>
                     <div class="water-wrap">
                         <div id="waterRing" class="water-ring">
@@ -142,11 +192,21 @@
                             </div>
                         </div>
                     </div>
-                </article>
+                </article> -->
 
                 <article class="panel history-panel">
                     <h2 class="panel-title">Histórico</h2>
-                    <ul id="historyList" class="history-list"></ul>
+                    <ul id="historyList" class="history-list">
+                        <li></li>
+                        {% for registro in historico %}
+                        <li>
+                            <span class="history-date">{{ registro.data|date:"d/m/Y" }}</span>
+                            <span class="history-weight">{{ registro.valor|floatformat:2 }} kg</span>
+                        </li>
+                        {% empty %}
+                        <li class="empty-state">Nenhum registro de peso</li>
+                        {% endfor %}
+                    </ul>
                 </article>
             </section>
         </section>

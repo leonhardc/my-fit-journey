@@ -60,11 +60,25 @@ def dashboard(request):
     peso_inicial = usuario.peso_inicial
     peso_atual = Peso.objects.filter(usuario=usuario).order_by('-data').first() # Ultimo peso registrado
     peso_perdido = peso_inicial - peso_atual.valor if peso_inicial and peso_atual else 0
+    bmi_percentage = (usuario.imc / 40) * 100 if usuario.imc else 0 # Supondo que 40 seja o IMC máximo para a escala
+    historico_peso = Peso.objects.filter(usuario=usuario).order_by('data')
+    datas = [p.data.strftime("%d/%m") for p in historico_peso]
+    pesos = [p.valor for p in historico_peso]
+
+    meta_peso = usuario.meta_peso  # exemplo fixo (pode vir do banco)
+
+    # cria uma lista com o mesmo tamanho do histórico
+    linha_meta = [meta_peso] * len(pesos)
     contexto = {
         'usuario': usuario,
         'hoje': hoje,
         'peso_inicial': peso_inicial,
         'peso_atual': peso_atual,
         'peso_perdido': peso_perdido,
+        'bmi_percentage': bmi_percentage,
+        'historico': historico_peso,
+        'datas': datas,
+        'pesos': pesos,
+        'linha_meta': linha_meta,
     }
     return render(request, 'usuario/dashboard.html', contexto)
