@@ -5,160 +5,177 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Fit Journey</title>
-    <meta name="description" content="Acompanhamento de peso, IMC e consumo de água em HTML, CSS e JavaScript puro." />
-    <link rel="stylesheet" href="{% static 'styles/styles.css' %}" />
+    <title>Dashboard - My Fit Journey</title>
+    <meta name="description" content="Acompanhamento de peso, IMC e metas com visual moderno em Tailwind CSS." />
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-    <div class="bg-shape bg-shape-a" aria-hidden="true"></div>
-    <div class="bg-shape bg-shape-b" aria-hidden="true"></div>
-
-    <header class="topbar">
-        <div class="container topbar-inner">
+<body class="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white">
+    <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-700 sticky top-0 z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
             <div>
-                <h1 class="brand"><span>My</span> Fit Journey</h1>
-                <p class="welcome" id="welcomeMessage">Olá, {{ usuario.user.username }}</p>
+                <h1 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">My Fit Journey</h1>
+                <p class="text-slate-300 mt-1" id="welcomeMessage">Olá, {{ usuario.user.first_name|default:usuario.user.username }}</p>
             </div>
         </div>
     </header>
 
-    <main class="container layout">
-        <section class="panel forms-panel">
-            <h2 class="panel-title">Ações</h2>
-
-            <div class="form-block">
-                <h3>Registrar Peso</h3>
-                <form id="weightForm" class="grid-form">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <section class="lg:col-span-4 space-y-6">
+                <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-6 backdrop-blur-md">
+                    <h2 class="text-xl font-semibold mb-5">Registrar Peso</h2>
+                    <form id="weightForm" class="space-y-4">
                     {% csrf_token %}
-                    <label for="weightDate">Data</label>
-                    <input id="weightDate" name="date" type="date" required value="{{hoje|date:'Y-m-d'}}" />
+                        <div>
+                            <label for="weightDate" class="block text-sm text-slate-300 mb-2">Data</label>
+                            <input id="weightDate" name="date" type="date" required value="{{hoje|date:'Y-m-d'}}"
+                                class="w-full px-4 py-2.5 bg-slate-700/60 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition" />
+                        </div>
+                        <div>
+                            <label for="weightValue" class="block text-sm text-slate-300 mb-2">Peso (kg)</label>
+                            <input id="weightValue" name="weight" type="number" step="0.1" min="1" placeholder="Ex: 82.5" required
+                                class="w-full px-4 py-2.5 bg-slate-700/60 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition" />
+                        </div>
+                        <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-2.5 px-4 rounded-lg transition">Salvar Registro</button>
+                    </form>
+                </div>
 
-                    <label for="weightValue">Peso (kg)</label>
-                    <input id="weightValue" name="weight" type="number" step="0.1" min="1" placeholder="Ex: 82.5"
-                        required />
-
-                    <button type="submit" class="btn btn-primary">Salvar Registro</button>
-                </form>
-            </div>
-
-            <div class="form-block">
-                <h3>Meu Perfil</h3>
-                <form id="profileForm" class="grid-form">
+                <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-6 backdrop-blur-md">
+                    <h2 class="text-xl font-semibold mb-5">Meu Perfil</h2>
+                    <form id="profileForm" class="space-y-4">
                     {% csrf_token %}
-                    <label for="profileName">Nome</label>
-                    <input id="profileName" name="name" type="text" required value="{{ usuario.user.first_name }}" />
-
-                    <label for="profileHeight">Altura (cm)</label>
-                    <input id="profileHeight" name="height" type="number" min="0" max="250" required
-                        value="{{ usuario.altura|floatformat:0 }}" />
-
-                    <label for="profileStartWeight">Peso Inicial (kg)</label>
-                    <input id="profileStartWeight" name="startWeight" type="number" step="0.1" min="1" required
-                        value="{{ usuario.peso_inicial|floatformat:0 }}" />
-
-                    <label for="profileGoalWeight">Meta de Peso (kg)</label>
-                    <input id="profileGoalWeight" name="goalWeight" type="number" step="0.1" min="1" required
-                        value="{{ usuario.meta_peso|floatformat:0 }}" />
-
-                    <button type="submit" class="btn">Salvar Perfil</button>
-                </form>
-            </div>
-        </section>
-
-        <section class="content-panel">
-            <section class="metrics-grid">
-                <article class="metric-card metric-highlight">
-                    <p class="metric-label">Peso Atual</p>
-                    <p class="metric-value" id="metricCurrentWeight">{{ peso_atual.valor|floatformat:2|default:"0.00" }}
-                        kg</p>
-                </article>
-
-                <article class="metric-card">
-                    <p class="metric-label">Meta</p>
-                    <p class="metric-value" id="metricGoalWeight">{{ usuario.meta_peso|floatformat:2|default:"0.00" }}
-                        kg</p>
-                    <p class="metric-sub" id="metricRemaining">Faltam 0 kg</p>
-                </article>
-
-                <article class="metric-card">
-                    <p class="metric-label">Perdido</p>
-                    <p class="metric-value" id="metricTotalLost">{{ peso_perdido|floatformat:2|default:"0.00" }} kg</p>
-                    <p class="metric-sub">Desde o início</p>
-                </article>
-
-                <article class="metric-card">
-                    <p class="metric-label">IMC</p>
-                    <p class="metric-value" id="metricBmi">{{ usuario.imc|floatformat:2|default:"0.0" }}</p>
-                </article>
+                        <div>
+                            <label for="profileName" class="block text-sm text-slate-300 mb-2">Nome</label>
+                            <input id="profileName" name="name" type="text" required value="{{ usuario.user.first_name }}"
+                                class="w-full px-4 py-2.5 bg-slate-700/60 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition" />
+                        </div>
+                        <div>
+                            <label for="profileHeight" class="block text-sm text-slate-300 mb-2">Altura (cm)</label>
+                            <input id="profileHeight" name="height" type="number" min="0" max="250" required
+                                value="{{ usuario.altura|floatformat:0 }}"
+                                class="w-full px-4 py-2.5 bg-slate-700/60 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition" />
+                        </div>
+                        <div>
+                            <label for="profileStartWeight" class="block text-sm text-slate-300 mb-2">Peso Inicial (kg)</label>
+                            <input id="profileStartWeight" name="startWeight" type="number" step="0.1" min="1" required
+                                value="{{ usuario.peso_inicial|floatformat:0 }}"
+                                class="w-full px-4 py-2.5 bg-slate-700/60 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition" />
+                        </div>
+                        <div>
+                            <label for="profileGoalWeight" class="block text-sm text-slate-300 mb-2">Meta de Peso (kg)</label>
+                            <input id="profileGoalWeight" name="goalWeight" type="number" step="0.1" min="1" required
+                                value="{{ usuario.meta_peso|floatformat:0 }}"
+                                class="w-full px-4 py-2.5 bg-slate-700/60 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition" />
+                        </div>
+                        <button type="submit" class="w-full bg-slate-700 hover:bg-slate-600 border border-slate-600 text-white font-semibold py-2.5 px-4 rounded-lg transition">Salvar Perfil</button>
+                    </form>
+                </div>
             </section>
 
-            <section class="panel chart-panel">
-                <canvas id="grafico-pesos"></canvas>
-                {{ datas|json_script:"datas" }}
-                {{ pesos|json_script:"pesos" }}
-                {{ linha_meta|json_script:"linhaMeta" }}
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                <script>
-                    // TODO: Mudar isso para um arquivo de script externo
-                    const datas = JSON.parse(document.getElementById('datas').textContent);
-                    const pesos = JSON.parse(document.getElementById('pesos').textContent);
-                    const linhaMeta = JSON.parse(document.getElementById('linhaMeta').textContent);
-                    const ctx = document.getElementById('grafico-pesos').getContext('2d');
+            <section class="lg:col-span-8 space-y-6">
+                <section class="grid grid-cols-2 xl:grid-cols-4 gap-4">
+                    <article class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 backdrop-blur-md">
+                        <p class="text-sm text-slate-400">Peso Atual</p>
+                        <p class="text-2xl font-semibold text-cyan-300 mt-2" id="metricCurrentWeight">{{ peso_atual.valor|floatformat:2|default:"0.00" }} kg</p>
+                    </article>
 
-                    new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: datas,
-                            datasets: [
-                                {
-                                    label: 'Peso (kg)',
-                                    data: pesos,
-                                    borderWidth: 2,
-                                    tension: 0.3
-                                },
-                                {
-                                    label: 'Meta de Peso',
-                                    data: linhaMeta,
-                                    borderDash: [5, 5], // linha pontilhada
-                                    borderWidth: 2
-                                }
-                            ]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display: true
-                                }
+                    <article class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 backdrop-blur-md">
+                        <p class="text-sm text-slate-400">Meta</p>
+                        <p class="text-2xl font-semibold mt-2" id="metricGoalWeight">{{ usuario.meta_peso|floatformat:2|default:"0.00" }} kg</p>
+                        <p class="text-xs text-slate-400 mt-1" id="metricRemaining">Faltam 0 kg</p>
+                    </article>
+
+                    <article class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 backdrop-blur-md">
+                        <p class="text-sm text-slate-400">Perdido</p>
+                        <p class="text-2xl font-semibold mt-2" id="metricTotalLost">{{ peso_perdido|floatformat:2|default:"0.00" }} kg</p>
+                        <p class="text-xs text-slate-400 mt-1">Desde o início</p>
+                    </article>
+
+                    <article class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 backdrop-blur-md">
+                        <p class="text-sm text-slate-400">IMC</p>
+                        <p class="text-2xl font-semibold mt-2" id="metricBmi">{{ usuario.imc|floatformat:2|default:"0.0" }}</p>
+                    </article>
+                </section>
+
+                <section class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 sm:p-6 backdrop-blur-md">
+                    <h2 class="text-lg font-semibold mb-4">Evolução do Peso</h2>
+                    <canvas id="grafico-pesos" class="!w-full !h-[280px]"></canvas>
+                    {{ datas|json_script:"datas" }}
+                    {{ pesos|json_script:"pesos" }}
+                    {{ linha_meta|json_script:"linhaMeta" }}
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <script>
+                        const datas = JSON.parse(document.getElementById('datas').textContent);
+                        const pesos = JSON.parse(document.getElementById('pesos').textContent);
+                        const linhaMeta = JSON.parse(document.getElementById('linhaMeta').textContent);
+                        const ctx = document.getElementById('grafico-pesos').getContext('2d');
+
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: datas,
+                                datasets: [
+                                    {
+                                        label: 'Peso (kg)',
+                                        data: pesos,
+                                        borderWidth: 2,
+                                        borderColor: '#22d3ee',
+                                        backgroundColor: 'rgba(34, 211, 238, 0.15)',
+                                        tension: 0.3
+                                    },
+                                    {
+                                        label: 'Meta de Peso',
+                                        data: linhaMeta,
+                                        borderDash: [5, 5],
+                                        borderWidth: 2,
+                                        borderColor: '#60a5fa'
+                                    }
+                                ]
                             },
-                            scales: {
-                                y: {
-                                    beginAtZero: false,
-                                    min: Math.min(...pesos, ...linhaMeta) - 10,
-                                    max: Math.max(...pesos, ...linhaMeta ) + 10
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        display: true,
+                                        labels: {
+                                            color: '#cbd5e1'
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    x: {
+                                        ticks: { color: '#94a3b8' },
+                                        grid: { color: 'rgba(148, 163, 184, 0.15)' }
+                                    },
+                                    y: {
+                                        beginAtZero: false,
+                                        min: Math.min(...pesos, ...linhaMeta) - 10,
+                                        max: Math.max(...pesos, ...linhaMeta) + 10,
+                                        ticks: { color: '#94a3b8' },
+                                        grid: { color: 'rgba(148, 163, 184, 0.15)' }
+                                    }
                                 }
                             }
-                        }
-                    });
-                </script>
-            </section>
+                        });
+                    </script>
+                </section>
 
-            <section class="three-cols">
-                <article class="panel bmi-panel">
-                    <h2 class="panel-title">IMC</h2>
-                    <div class="bmi-number" id="bmiNumber">{{ usuario.imc|floatformat:2|default:"0.0" }}</div>
-                    <p class="bmi-category" id="bmiCategory">-</p>
+                <section class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                    <article class="bg-slate-800/60 border border-slate-700 rounded-2xl p-6 backdrop-blur-md">
+                        <h2 class="text-lg font-semibold mb-4">IMC</h2>
+                        <div class="text-4xl font-bold text-cyan-300" id="bmiNumber">{{ usuario.imc|floatformat:2|default:"0.0" }}</div>
+                        <p class="text-sm text-slate-400 mt-1 mb-5" id="bmiCategory">-</p>
 
-                    <div class="bmi-track">
-                        <div class="bmi-segment under"></div>
-                        <div class="bmi-segment normal"></div>
-                        <div class="bmi-segment over"></div>
-                        <div class="bmi-segment obese"></div>
-                        <div id="bmiMarker" class="bmi-marker" aria-hidden="true"
-                            data-bs-percentage="{{ bmi_percentage }}"></div>
+                        <div class="bmi-track relative h-3 rounded-full overflow-hidden bg-slate-700">
+                            <div class="bmi-segment under absolute inset-y-0 left-0 w-1/4 bg-blue-500/70"></div>
+                            <div class="bmi-segment normal absolute inset-y-0 left-1/4 w-1/4 bg-emerald-500/70"></div>
+                            <div class="bmi-segment over absolute inset-y-0 left-2/4 w-1/4 bg-amber-500/70"></div>
+                            <div class="bmi-segment obese absolute inset-y-0 left-3/4 w-1/4 bg-rose-500/70"></div>
+                            <div id="bmiMarker" class="bmi-marker absolute -top-1 h-5 w-1 bg-white rounded" aria-hidden="true"
+                                data-bs-percentage="{{ bmi_percentage }}"></div>
+                        </div>
                         <script>
-                            // TODO: Mudar isso para um arquivo de script externo
                             document.addEventListener('DOMContentLoaded', function () {
                                 const marker = document.getElementById('bmiMarker');
                                 const percentage = parseFloat(marker.getAttribute('data-bs-percentage')) || 0;
@@ -167,52 +184,33 @@
                                 marker.style.left = `${markerPosition}px`;
                             });
                         </script>
-                    </div>
-                    <div class="bmi-legend">
-                        <span>15</span>
-                        <span>25</span>
-                        <span>30</span>
-                        <span>40</span>
-                    </div>
-                </article>
 
-                <!-- <article class="panel water-panel">
-                    <h2 class="panel-title">Água Hoje</h2>
-                    <div class="water-wrap">
-                        <div id="waterRing" class="water-ring">
-                            <div class="water-inner">
-                                <span id="waterCount">0/8</span>
-                            </div>
+                        <div class="flex justify-between text-xs text-slate-400 mt-3">
+                            <span>15</span>
+                            <span>25</span>
+                            <span>30</span>
+                            <span>40</span>
                         </div>
-                        <div class="water-controls">
-                            <p id="waterStatus">Faltam 8 copos</p>
-                            <div class="water-buttons">
-                                <button id="waterMinus" class="btn" type="button">-1</button>
-                                <button id="waterPlus" class="btn btn-primary" type="button">+1</button>
-                            </div>
-                        </div>
-                    </div>
-                </article> -->
+                    </article>
 
-                <article class="panel history-panel">
-                    <h2 class="panel-title">Histórico</h2>
-                    <ul id="historyList" class="history-list">
-                        <li></li>
-                        {% for registro in historico %}
-                        <li>
-                            <span class="history-date">{{ registro.data|date:"d/m/Y" }}</span>
-                            <span class="history-weight">{{ registro.valor|floatformat:2 }} kg</span>
-                        </li>
-                        {% empty %}
-                        <li class="empty-state">Nenhum registro de peso</li>
-                        {% endfor %}
-                    </ul>
-                </article>
+                    <article class="bg-slate-800/60 border border-slate-700 rounded-2xl p-6 backdrop-blur-md">
+                        <h2 class="text-lg font-semibold mb-4">Histórico</h2>
+                        <ul id="historyList" class="space-y-2 max-h-72 overflow-auto pr-1">
+                            {% for registro in historico %}
+                            <li class="flex items-center justify-between rounded-lg bg-slate-700/50 border border-slate-600 px-3 py-2">
+                                <span class="text-sm text-slate-300">{{ registro.data|date:"d/m/Y" }}</span>
+                                <span class="text-sm font-semibold text-cyan-300">{{ registro.valor|floatformat:2 }} kg</span>
+                            </li>
+                            {% empty %}
+                            <li class="text-sm text-slate-400">Nenhum registro de peso</li>
+                            {% endfor %}
+                        </ul>
+                    </article>
+                </section>
             </section>
-        </section>
+        </div>
     </main>
 
-    <!-- <script src="{% static 'scripts/scripts.js' %}"></script> -->
 </body>
 
 </html>

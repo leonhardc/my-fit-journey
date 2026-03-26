@@ -5,60 +5,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyFitJourney - Monitore suas Métricas Corporais</title>
-    <link rel="stylesheet" href="{% static 'styles/index.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <header>
-        <nav>
-            <div class="logo">MyFitJourney</div>
-            <ul class="nav-links">
-                <li><a href="#features">Recursos</a></li>
-                <li><a href="#about">Sobre</a></li>
-                <li><a href="{% url 'usuario:login' %}">Login</a></li>
-                <li><a href="{% url 'usuario:cadastro' %}">Cadastro</a></li>
+<body class="bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white">
+    <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-700">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">MyFitJourney</div>
+            <ul class="flex gap-8">
+                <li><a href="#features" class="hover:text-cyan-400 transition">Recursos</a></li>
+                <li><a href="#about" class="hover:text-cyan-400 transition">Sobre</a></li>
+                <li><a href="{% url 'usuario:login' %}" class="hover:text-cyan-400 transition">Login</a></li>
+                <li><a href="{% url 'usuario:cadastro' %}" class="hover:text-cyan-400 transition">Cadastro</a></li>
             </ul>
         </nav>
     </header>
     
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Monitore sua Jornada Fitness</h1>
-            <p>Acompanhe métricas corporais, atinja seus objetivos e mantenha-se motivado com dados precisos e insights personalizados.</p>
-            <a href="{% url 'usuario:cadastro' %}" class="btn">Começar Agora</a>
+    <section class="hero min-h-screen flex items-center justify-center px-4">
+        <div class="text-center max-w-2xl">
+            <h1 class="text-5xl sm:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">Monitore sua Jornada Fitness</h1>
+            <p class="text-xl text-slate-300 mb-8">Acompanhe métricas corporais, atinja seus objetivos e mantenha-se motivado com dados precisos e insights personalizados.</p>
+            <a href="{% url 'usuario:cadastro' %}" class="inline-block bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 px-8 py-3 rounded-lg font-semibold transition">Começar Agora</a>
         </div>
     </section>
     
-    <section id="features" class="features">
-        <h2>Recursos Principais</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <h3>📊 Gráficos Detalhados</h3>
-                <p>Visualize seu progresso com gráficos interativos e relatórios personalizados.</p>
+    <section id="features" class="py-20 px-4 max-w-7xl mx-auto">
+        <h2 class="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Recursos Principais</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-slate-800/50 border border-slate-700 rounded-lg p-6 hover:border-cyan-500 transition">
+                <h3 class="text-xl font-bold mb-4">📊 Gráficos Detalhados</h3>
+                <p class="text-slate-300">Visualize seu progresso com gráficos interativos e relatórios personalizados.</p>
             </div>
-            <div class="feature-card">
-                <h3>⚖️ Rastreamento de Peso</h3>
-                <p>Monitore variações de peso e acompanhe tendências ao longo do tempo.</p>
+            <div class="bg-slate-800/50 border border-slate-700 rounded-lg p-6 hover:border-cyan-500 transition">
+                <h3 class="text-xl font-bold mb-4">⚖️ Rastreamento de Peso</h3>
+                <p class="text-slate-300">Monitore variações de peso e acompanhe tendências ao longo do tempo.</p>
             </div>
-            <div class="feature-card">
-                <h3>💪 Métricas Corporais</h3>
-                <p>Registre gordura corporal, IMC, circunferências e outras medidas importantes.</p>
+            <div class="bg-slate-800/50 border border-slate-700 rounded-lg p-6 hover:border-cyan-500 transition">
+                <h3 class="text-xl font-bold mb-4">💪 Métricas Corporais</h3>
+                <p class="text-slate-300">Registre gordura corporal, IMC, circunferências e outras medidas importantes.</p>
             </div>
-            <div class="feature-card">
-                <h3>🎯 Objetivos Personalizados</h3>
-                <p>Defina metas e receba recomendações baseadas em seus objetivos.</p>
+            <div class="bg-slate-800/50 border border-slate-700 rounded-lg p-6 hover:border-cyan-500 transition">
+                <h3 class="text-xl font-bold mb-4">🎯 Objetivos Personalizados</h3>
+                <p class="text-slate-300">Defina metas e receba recomendações baseadas em seus objetivos.</p>
             </div>
-            <div class="feature-card">
-                <h3>📱 Sincronização</h3>
-                <p>Acesse seus dados em qualquer dispositivo, sempre sincronizado.</p>
+            <div class="bg-slate-800/50 border border-slate-700 rounded-lg p-6 hover:border-cyan-500 transition">
+                <h3 class="text-xl font-bold mb-4">📱 Sincronização</h3>
+                <p class="text-slate-300">Acesse seus dados em qualquer dispositivo, sempre sincronizado.</p>
             </div>
-            <div class="feature-card">
-                <h3>📈 Histórico Completo</h3>
-                <p>Mantenha um registro histórico de todos os seus acompanhamentos.</p>
+            <div class="bg-slate-800/50 border border-slate-700 rounded-lg p-6 hover:border-cyan-500 transition">
+                <h3 class="text-xl font-bold mb-4">📈 Histórico Completo</h3>
+                <p class="text-slate-300">Mantenha um registro histórico de todos os seus acompanhamentos.</p>
             </div>
         </div>
     </section>
     
-    <footer>
+    <footer class="border-t border-slate-700 py-8 text-center text-slate-400">
         <p>&copy; 2026 MyFitJourney. Todos os direitos reservados.</p>
     </footer>
 </body>

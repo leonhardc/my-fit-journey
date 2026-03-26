@@ -5,68 +5,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - My Fit Journey</title>
-    <link rel="stylesheet" href="{% static 'styles/cadastro.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Criar Conta</h1>
-            <p>Comece sua jornada fitness agora</p>
-        </div>
-
-        <form action="/cadastro" method="POST">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="nome">Nome</label>
-                <input type="text" id="nome" name="nome" required>
-            </div>
-            <div class="form-group">
-                <label for="sobrenome">Sobrenome</label>
-                <input type="text" id="sobrenome" name="sobrenome" required>
+<body class="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white">
+    <div class="min-h-screen flex items-center justify-center px-4 py-12">
+        <div class="w-full max-w-2xl bg-slate-800/80 border border-slate-700 rounded-2xl shadow-2xl p-8 sm:p-10 backdrop-blur-md">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Criar Conta</h1>
+                <p class="text-slate-300">Comece sua jornada fitness agora</p>
             </div>
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
+            {% if error %}
+            <div class="mb-6 rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+                {{ error }}
             </div>
+            {% endif %}
 
-            <div class="form-group">
-                <label for="telefone">Telefone</label>
-                <input type="tel" id="telefone" name="telefone">
-            </div>
-
-            <div class="form-group">
-                <label for="data_nascimento">Data de Nascimento</label>
-                <input type="date" id="data_nascimento" name="data_nascimento">
-            </div>
-
-            <div class="form-group">
-                <label for="objetivo">Objetivo</label>
-                <select id="objetivo" name="objetivo">
-                    <option value="">Selecione um objetivo</option>
-                    <option value="perder_peso">Perder Peso</option>
-                    <option value="ganhar_massa">Ganhar Massa Muscular</option>
-                    <option value="saude">Melhorar Saúde</option>
-                    <option value="resistencia">Aumentar Resistência</option>
-                </select>
-            </div>
-
-            <div class="password-group">
-                <div class="form-group">
-                    <label for="senha">Senha</label>
-                    <input type="password" id="senha" name="senha" required>
+            <form action="{% url 'usuario:cadastro' %}" method="POST" class="space-y-5">
+                {% csrf_token %}
+                
+                <div>
+                    <label for="nome" class="block text-sm font-medium text-slate-200 mb-2">Nome</label>
+                    <input type="text" id="nome" name="nome" required class="w-full px-4 py-2.5 bg-slate-700/60 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition">
                 </div>
-                <div class="form-group">
-                    <label for="confirmar_senha">Confirmar Senha</label>
-                    <input type="password" id="confirmar_senha" name="confirmar_senha" required>
+
+                <div>
+                    <label for="sobrenome" class="block text-sm font-medium text-slate-200 mb-2">Sobrenome</label>
+                    <input type="text" id="sobrenome" name="sobrenome" required class="w-full px-4 py-2.5 bg-slate-700/60 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition">
                 </div>
+
+                <div>
+                    <label for="email" class="block text-sm font-medium text-slate-200 mb-2">Email</label>
+                    <input type="email" id="email" name="email" required class="w-full px-4 py-2.5 bg-slate-700/60 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition">
+                </div>
+
+                <div>
+                    <label for="telefone" class="block text-sm font-medium text-slate-200 mb-2">Telefone</label>
+                    <input type="tel" id="telefone" name="telefone" class="w-full px-4 py-2.5 bg-slate-700/60 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition">
+                </div>
+
+                <div>
+                    <label for="data_nascimento" class="block text-sm font-medium text-slate-200 mb-2">Data de Nascimento</label>
+                    <input type="date" id="data_nascimento" name="data_nascimento" class="w-full px-4 py-2.5 bg-slate-700/60 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition">
+                </div>
+
+                <div>
+                    <label for="objetivo" class="block text-sm font-medium text-slate-200 mb-2">Objetivo</label>
+                    <select id="objetivo" name="objetivo" class="w-full px-4 py-2.5 bg-slate-700/60 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition">
+                        <option value="">Selecione um objetivo</option>
+                        <option value="perder_peso">Perder Peso</option>
+                        <option value="ganhar_massa">Ganhar Massa Muscular</option>
+                        <option value="saude">Melhorar Saúde</option>
+                        <option value="resistencia">Aumentar Resistência</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label for="senha" class="block text-sm font-medium text-slate-200 mb-2">Senha</label>
+                        <input type="password" id="senha" name="senha" required class="w-full px-4 py-2.5 bg-slate-700/60 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition">
+                    </div>
+                    <div>
+                        <label for="confirmar_senha" class="block text-sm font-medium text-slate-200 mb-2">Confirmar Senha</label>
+                        <input type="password" id="confirmar_senha" name="confirmar_senha" required class="w-full px-4 py-2.5 bg-slate-700/60 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-2.5 px-4 rounded-lg transition duration-200 mt-6">Cadastrar</button>
+            </form>
+
+            <div class="text-center mt-6 text-slate-300">
+                Já tem uma conta? <a href="{% url 'usuario:login' %}" class="text-cyan-400 hover:text-cyan-300 font-medium">Fazer login</a>
             </div>
-
-            <button type="submit" class="btn">Cadastrar</button>
-        </form>
-
-        <div class="footer">
-            Já tem uma conta? <a href="/login">Fazer login</a>
         </div>
     </div>
 </body>
