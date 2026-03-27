@@ -80,5 +80,6 @@ def dashboard(request):
         'datas': datas,
         'pesos': pesos,
         'linha_meta': linha_meta,
+        'falta_meta': meta_peso - peso_atual.valor if meta_peso and peso_atual else 0
     }
     return render(request, 'usuario/dashboard.html', contexto)
